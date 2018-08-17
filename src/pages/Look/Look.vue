@@ -1,6 +1,6 @@
 <template>
   <div class="look">
-    <a class="maodian" href="#shang">
+    <a class="maodian" href="#">
       <i class="iconfont icon-anonymous-iconfont"></i>
     </a>
     <header>
@@ -14,12 +14,7 @@
     </header>
 
     <div class="lbt">
-      <!--<div class="lbtul">
-        <img src="../../commen/img/shiwu1.jpg" alt="">
-        <img src="../../commen/img/shiwu2.jpg" alt="">
-        <img src="../../commen/img/shiwu3.jpg" alt="">
-        <img src="../../commen/img/shiwu4.jpg" alt="">
-      </div>-->
+
       <div class="swiper-container">
         <div class="swiper-wrapper">
           <div class="swiper-slide"><img src="../../commen/img/shiwu1.jpg" alt=""></div>
@@ -31,75 +26,13 @@
       </div>
     </div>
     <div class="article">
-      <ul class="articleul">
-        <li>
+      <ul class="articleul" ref="picul">
+        <li v-for="(i,index) in detail.column" :key="index" ref="picli" >
           <div class="zhengfang">
-            <span>
-              334篇文章
-            </span>
+            <span>{{i.articleCount}}</span>
           </div>
           <span>
-            严选推荐
-          </span>
-        </li>
-        <li>
-          <div class="zhengfang">
-            <span>
-              334篇文章
-            </span>
-          </div>
-          <span>
-            严选推荐
-          </span>
-        </li>
-        <li>
-          <div class="zhengfang">
-            <span>
-              334篇文章
-            </span>
-          </div>
-          <span>
-            严选推荐
-          </span>
-        </li>
-        <li>
-          <div class="zhengfang">
-            <span>
-              334篇文章
-            </span>
-          </div>
-          <span>
-            严选推荐
-          </span>
-        </li>
-        <li>
-          <div class="zhengfang">
-            <span>
-              334篇文章
-            </span>
-          </div>
-          <span>
-            严选推荐
-          </span>
-        </li>
-        <li>
-          <div class="zhengfang">
-            <span>
-              334篇文章
-            </span>
-          </div>
-          <span>
-            严选推荐
-          </span>
-        </li>
-        <li>
-          <div class="zhengfang">
-            <span>
-              334篇文章
-            </span>
-          </div>
-          <span>
-            严选推荐
+           {{i.title}}
           </span>
         </li>
       </ul>
@@ -272,29 +205,56 @@
 
   import RecommendPic from '../../components/Recommend-pic/Recommend-pic'
 
+  import {mapState} from 'vuex'
+
   export default {
     components: {
       Split,
       RecommendPic
     },
+    computed:{
+      ...mapState(['detail'])
+    },
     mounted() {
 
+      this.$store.dispatch('getDetail',()=>{
+        this.$nextTick(()=>{
+          new Swiper('.swiper-container', {
+            direction: 'horizontal',
+            spaceBetween: 0,
+            loop: true,
+            slidesPerView: 1.15,
+            centeredSlides: true
+          });
+          this._initBScroll2()
+          this._initBScroll('.topic-better')
+        })
+      })
 
-      new Swiper('.swiper-container', {
-        direction: 'horizontal',
-        spaceBetween: 0,
-        loop: true,
-        slidesPerView: 1.15,
-        centeredSlides: true
-      });
-      new BScroll('.article', {
-        scrollX: true,
-        click: true
-      })
-      new BScroll('.topic-better', {
-        scrollX: true,
-        click: true
-      })
+
+    },
+    methods:{
+      _initBScroll(clas){
+        new BScroll(clas, {
+          click: true,
+          scrollX: true,
+          scrollY: false,
+          eventPassthrough: 'vertical'
+        });
+      },
+      _initBScroll2(){
+        const ul = this.$refs.picul
+        const liWidth = 1.5
+        const space = 0.3
+        const size = this.detail.column.length
+        ul.style.width = (liWidth+space)*size+'rem'
+        new BScroll('.article',{
+          click: true,
+          scrollX: true,
+          scrollY: false,
+          eventPassthrough: 'vertical'
+        })
+      }
     }
   }
 </script>
@@ -357,7 +317,7 @@
       .articleul
         display flex
         justify-content space-around
-        width: 180%
+        /*width: 180%*/
         li
           text-align center
           margin-bottom 0.35rem

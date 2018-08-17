@@ -20,7 +20,7 @@
       </div>
       <div class="container">
         <div class="add">去添加点什么吧</div>
-        <div class="login">登录</div>
+        <div class="login" @click="$router.push('/personal')">登录</div>
       </div>
     </div>
 </template>
@@ -41,7 +41,7 @@
       position fixed
       top 0
       background-color white
-      z-index 20
+      z-index 18
       h1
         font-size 0.4rem
         text-align center

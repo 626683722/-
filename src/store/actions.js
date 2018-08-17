@@ -48,11 +48,12 @@ export default {
       cb && cb()
     }
   },
-  async getDetail ({commit,state}){
+  async getDetail ({commit,state},cb){
     const result = await reqDetail();
     if(result.code === 0){
       const detail = result.detail
       commit(RECEIVE_DETAIL,{detail})
+      cb && cb()
     }
   },
   async getNav ({commit,state},cb){

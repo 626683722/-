@@ -1,5 +1,34 @@
 <template>
+
   <div class="msite">
+
+
+    <transition name="fade">
+      <div class="zhezao" v-show="firstView">
+        <i class="iconfont icon-anonymous-iconfont" @click="handler"></i>
+        <div class="gift">
+          <div class="gift-new">
+            <span>新人专享礼</span>
+          </div>
+          <div class="gift-use">感谢使用,已经为你准备一份大礼</div>
+          <div class="gift-product">
+            <img src="../../commen/img/18.jpg" alt="">
+            <div class="gift-kuzi">
+              <span>绅士休闲裤</span>
+              <span>HOGO制造商</span>
+              <div class="gift-price">
+                <span>¥225</span>
+                <span>¥115</span>
+              </div>
+            </div>
+          </div>
+          <div class="btn-price">领卷立减300</div>
+          <div class="btn-product">查看更多商品</div>
+        </div>
+
+      </div>
+    </transition>
+
     <header>
       <div class="search">
         <h2>网易严选</h2>
@@ -14,7 +43,7 @@
       </div>
     </header>
     <mt-swipe :auto="4000" class="swp" :stopPropagation="true" :prevent="true">
-      <mt-swipe-item v-for="(item,index) in home.cateList" :key="index"><img :src='item.bannerUrl'></mt-swipe-item>
+      <mt-swipe-item v-for="(item,index) in home.cateList" :key="index"><img v-lazy='item.bannerUrl'></mt-swipe-item>
 
     </mt-swipe>
     <div class="wrap">
@@ -174,10 +203,12 @@
     <div class="time-price">
       <div class="time">
         <span>严 选 限 时 购</span>
+
+
         <div class="settime">
-          <span>24</span>:
-          <span>60</span>:
-          <span>60</span>
+          <span id="shi">24</span>:
+          <span id="fen">60</span>:
+          <span id="miao">60</span>
         </div>
         <span class="willtime">下一场 14.00 开始</span>
       </div>
@@ -256,15 +287,7 @@
             <div>更多居家好物</div>
             <i class="iconfont icon-anonymous-iconfont"></i>
           </div>
-          <!--<div class="content-list-small">
-            <div>
-              <img src="../../commen/img/41.png" alt="">
-              <span class="advantage">硬度偏好者精选</span>
-            </div>
-            <div><span>居家特惠</span></div>
-            <div>冬夏两用...</div>
-            <span>¥1889.1</span>
-          </div>-->
+
 
         </div>
       </div>
@@ -272,6 +295,7 @@
     </div>
 
   </div>
+
 </template>
 
 <script>
@@ -282,35 +306,69 @@
   import {mapState} from 'vuex'
 
   export default {
+    data() {
+      return {
+        firstView: true,
+
+      }
+    },
     components: {
       Split
     },
-    computed:{
+    computed: {
       ...mapState(['home'])
 
     },
     mounted() {
 
-      this.$store.dispatch('getHome',() => {
+      this.$store.dispatch('getHome', () => {
         this.$nextTick(() => {
           this._initBScroll('.wrapper');
           this._initBScroll('.new-scroll')
           this._initBScroll('.special-pics')
           this._initBScroll('.old-scroll')
         })
-      })
+      });
 
-
+      this.daoJiShi();
 
     },
-    methods:{
-      _initBScroll(clas){
-        new BScroll(clas,{
+    methods: {
+
+      _initBScroll(clas) {
+        new BScroll(clas, {
           click: true,
           scrollX: true,
           scrollY: false,
           eventPassthrough: 'vertical'
         })
+      },
+      handler() {
+        this.firstView = false
+      },
+
+      daoJiShi() {
+        const miao = document.getElementById('miao')
+        const fen = document.getElementById('fen')
+        const shi = document.getElementById('shi')
+        let tMiao = 60
+        let tFen = 60
+        let tShi = 24
+        setInterval(()=>{
+          tMiao--;
+          miao.innerHTML = tMiao
+          if(tMiao===0){
+            tFen--;
+            fen.innerHTML = tFen
+            if(tFen===0){
+              tShi--;
+              shi.innerHTML = tShi
+              tFen = 60
+            }
+            tMiao = 60
+          }
+
+        },1000)
       }
     }
   }
@@ -319,6 +377,108 @@
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../commen/stylus/mixins.styl"
   .msite
+
+    .zhezao
+      width: 100%
+      height: 13.5rem
+      background-color rgba(0, 0, 0, .5)
+      position fixed
+      z-index 20
+      i
+        font-size 0.57rem
+        position absolute
+        right: 0.35rem
+        top: 0.4rem
+      .gift
+        width: 6rem
+        height: 7rem
+        background-color white
+        position absolute
+        left: 0
+        right: 0
+        top: 0
+        bottom: 0
+        margin auto
+        border-radius 8px
+        .gift-new
+          text-align center
+          font-size 0.36rem
+          margin-top 0.3rem
+          span
+            font-weight bold
+
+            &:before
+              content ''
+              width 0.4rem
+              height: 2px
+              background-color black
+              display inline-block
+              transform translateY(-0.1rem) translateX(-0.2rem)
+            &:after
+              content ''
+              width 0.4rem
+              height: 2px
+              background-color black
+              display inline-block
+              transform translateY(-0.1rem) translateX(0.2rem)
+        .gift-use
+          text-align center
+          font-size 0.25rem
+          margin-top 0.2rem
+        .gift-product
+          width: 5.4rem
+          height: 2.3rem
+          margin-left 0.3rem
+          position relative
+          margin-top 0.3rem
+          img
+            width: 2.5rem
+            height: 100%
+          .gift-kuzi
+            background-color #f5f5f5
+            position absolute
+            width: 2.9rem
+            height: 100%
+            top: 0
+            right: 0
+            display flex
+            flex-direction column
+            justify-content center
+            span
+              &:nth-child(2)
+                margin-top 0.2rem
+                margin-bottom 0.2rem
+            .gift-price
+              span
+                &:last-child
+                  text-decoration line-through
+
+        .btn-price
+          text-align center
+          background-color deeppink
+          width: 5.4rem
+          height: 0.81rem
+          margin-left 0.3rem
+          line-height 0.8rem
+          margin-top 0.3rem
+          color white
+          font-size 0.32rem
+          box-sizing border-box
+          border-radius 5px
+        .btn-product
+          text-align center
+          background-color white
+          width: 5.4rem
+          height: 0.81rem
+          margin-left 0.3rem
+          line-height 0.8rem
+          margin-top 0.3rem
+          color black
+          font-size 0.32rem
+          box-sizing border-box
+          border-radius 5px
+          border 2px solid #f5f5f5
+
     overflow hidden
     background-color white
     margin-bottom 2rem
@@ -602,4 +762,13 @@
               margin-bottom 0.1rem
 
 
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 1s;
+  }
+
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+  {
+    opacity: 0;
+  }
 </style>

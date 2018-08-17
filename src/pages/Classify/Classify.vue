@@ -78,7 +78,7 @@
       position fixed
       top 0
       background-color white
-      z-index 20
+      z-index 18
       .int
         position absolute
         left 0

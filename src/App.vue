@@ -1,21 +1,27 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <TopZhezao ></TopZhezao>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
     <FooterGuide v-show="$route.meta.showFooter"></FooterGuide>
   </div>
 </template>
 
 <script>
   import FooterGuide from './components/FooterGuide/FooterGuide'
-export default {
-  components:{
-    FooterGuide
+  import TopZhezao from './components/TopZhezao/TopZhezao'
+
+  export default {
+    components: {
+      FooterGuide,
+      TopZhezao
+    }
   }
-}
 </script>
 
 <style>
-#app {
+  #app {
 
-}
+  }
 </style>
